@@ -10,23 +10,29 @@ __author__ = 'Zhengpeng Ai'
 
 
 from testchain.data.transaction import *
+import hashlib
 import struct
+import time
 
 
 class Block:
     def __init__(self, prev_block):
         self.id = prev_block.id + 1
         self.prev_hash = prev_block.hash()
-        self.txs = []
         self.nonce = 0
         self.timestamp = 0
+        self.txs = []
         return
 
     def to_bytes(self):
-        return
+        self.timestamp = time.time()
+        ret = struct.pack('!l64sldl', self.id, self.prev_hash, self.nonce, self.timestamp, len(self.txs))
+        for tx in self.txs:
+            ret += tx.to_bytes()
+        return ret
 
     def hash(self):
-        return
+        return hashlib.sha256().update(self.to_bytes()).hexdigest()
 
     def append_tx(self, tx: Transaction):
         self.txs.append(tx)

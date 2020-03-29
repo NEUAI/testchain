@@ -10,6 +10,7 @@ __author__ = 'Zhengpeng Ai'
 
 from testchain.data.chain import *
 from testchain.network.p2p import *
+from testchain.consensus.message import *
 import threading
 
 
@@ -21,10 +22,20 @@ class Protocol(threading.Thread):
         return
 
     def run(self):
-
+        msg = JoinMessage()
+        self.network.send(msg.to_bytes())
+        del msg
+        try:
+            while True:
+                data, address = self.network.receive()
+                self.handle_msg(data, address)
+        except KeyboardInterrupt:
+            msg = QuitMessage()
+            self.network.send(msg.to_bytes())
+            del msg
         return
 
-    def handle_msg(self, msg: bytes):
+    def handle_msg(self, msg_bytes: bytes, address: str):
 
         return
 

@@ -21,11 +21,11 @@ class Transaction:
         return
 
     def to_bytes(self):
-        return socket.inet_aton(self.address_in) + socket.inet_aton(self.address_out) + struct.pack('>f', self.amount)
+        return socket.inet_aton(self.address_in) + socket.inet_aton(self.address_out) + struct.pack('!f', self.amount)
 
     @staticmethod
     def to_transaction(tx_bytes: bytes):
         address_in = socket.inet_ntoa(tx_bytes[0:4])
         address_out = socket.inet_ntoa(tx_bytes[4:8])
-        amount = struct.unpack('>f', tx_bytes[8:12])[0]
+        amount = struct.unpack('!f', tx_bytes[8:12])[0]
         return Transaction(address_in, address_out, amount)
