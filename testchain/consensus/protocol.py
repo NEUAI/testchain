@@ -11,6 +11,7 @@ __author__ = 'Zhengpeng Ai'
 from testchain.data.chain import *
 from testchain.network.p2p import *
 from testchain.consensus.message import *
+from testchain.incentive.wallet import *
 import threading
 
 
@@ -19,6 +20,7 @@ class Protocol(threading.Thread):
         super(Protocol, self).__init__()
         self.chain = Chain()
         self.network = P2P()
+        self.wallet = Wallet()
         return
 
     def run(self):
@@ -42,4 +44,5 @@ class Protocol(threading.Thread):
     def __del__(self):
         del self.network
         del self.chain
+        del self.wallet
         return

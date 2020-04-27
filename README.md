@@ -23,7 +23,6 @@ TestChain is based on the basic model proposed by Yuan Y. and Wang F.-Y. in thei
 
 ### Incentive Layer
 
-* Coin
 * Wallet
 
 ## Usage

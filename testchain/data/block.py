@@ -16,17 +16,16 @@ import time
 
 
 class Block:
-    def __init__(self, prev_block):
-        self.id = prev_block.id + 1
-        self.prev_hash = prev_block.hash()
-        self.nonce = 0
-        self.timestamp = 0
+    def __init__(self, blk_id: int, prev_hash: str, timestamp: float=0):
+        self.id = blk_id
+        self.prev_hash = prev_hash
+        self.timestamp = timestamp
         self.txs = []
         return
 
     def to_bytes(self):
         self.timestamp = time.time()
-        ret = struct.pack('!l64sldl', self.id, self.prev_hash, self.nonce, self.timestamp, len(self.txs))
+        ret = struct.pack('!Q64sdQ', self.id, self.prev_hash, self.timestamp, len(self.txs))
         for tx in self.txs:
             ret += tx.to_bytes()
         return ret
@@ -39,9 +38,12 @@ class Block:
         return
 
     @staticmethod
-    def to_block(tx_bytes: bytes):
-
-        return
+    def to_block(blk_bytes: bytes):
+        (blk_id, prev_hash, timestamp, txs_len) = struct.unpack('!Q64sdQ', blk_bytes[0:88])
+        blk = Block(blk_id, prev_hash, timestamp)
+        for i in range(txs_len):
+            blk.append_tx(Transaction.to_transaction(blk_bytes[88+i*16:88+(i+1)*16]))
+        return blk
 
     def __del__(self):
         for tx in self.txs:

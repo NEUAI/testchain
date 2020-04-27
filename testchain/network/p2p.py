@@ -34,6 +34,10 @@ class P2P:
             data, address = self.sock.recvfrom(65535)
         return data, address
 
+    def append_ip(self, ip: str):
+        self.ip_table.append(ip)
+        return
+
     def __del__(self):
         self.sock.close()
         return

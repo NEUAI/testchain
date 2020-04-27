@@ -15,7 +15,7 @@ import time
 
 
 class Message:
-    def __init__(self, msg_type: str='null'):
+    def __init__(self, msg_type: str = 'null'):
         self.dict = {
             'type': msg_type,
             'timestamp': time.time()
